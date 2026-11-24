@@ -1,189 +1,155 @@
-    \# Android Diari de Viatges - Storage
+# 🌍 Android Diari de Viatges - Storage
 
+Aplicació Android desenvolupada amb Kotlin i Jetpack Compose que permet crear, gestionar, guardar i exportar cròniques de viatges i escapades.
 
+## 📱 Descripció del projecte
 
-Aplicació Android desenvolupada amb Kotlin i Jetpack Compose
+L'objectiu d'aquesta aplicació és permetre a l'usuari registrar les seves rutes i experiències de viatge mitjançant un formulari interactiu.
 
-que permet crear, guardar, consultar i exportar cròniques de viatges.
+Les dades es poden guardar en un historial privat dins de l'aplicació i exportar com a documents de text perquè l'usuari pugui conservar-les i compartir-les.
 
+## 🛠️ Tecnologies utilitzades
 
+-   Kotlin
+-   Android Studio
+-   Jetpack Compose
+-   Material Design 3
+-   Arquitectura MVVM
+-   StateFlow
+-   Navigation Compose
+-   JSON
+-   Internal Storage (`filesDir`)
+-   Storage Access Framework (SAF)
+-   ActivityResultContracts.CreateDocument
 
-\## Tecnologies utilitzades
+## 🏗️ Arquitectura MVVM
 
+El projecte utilitza l'arquitectura MVVM (Model-View-ViewModel), que separa les dades, la lògica de negoci i la interfície gràfica.
 
+### Model
 
-\- Kotlin
+El model conté les classes que representen les dades de l'aplicació:
 
-\- Android Studio
+-   `RouteEntry`: representa una ruta amb el nom, destinació, dificultat, pressupost, data, tipus de viatge i notes.
+-   `TravelDiaryUiState`: representa l'estat de la interfície i les dades del formulari.
 
-\- Jetpack Compose
+### ViewModel
 
-\- Material Design 3
+`TravelDiaryViewModel` gestiona l'estat de l'aplicació mitjançant `MutableStateFlow` i `StateFlow`.
 
-\- Arquitectura MVVM
+Les dades s'actualitzen de manera immutable utilitzant `copy()`.
 
-\- StateFlow
+També s'encarrega de validar els camps del formulari i coordinar el guardat de les rutes.
 
-\- Navigation Compose
+### View
 
-\- JSON
+La interfície està desenvolupada amb Jetpack Compose i està dividida en diferents pantalles:
 
-\- Storage Access Framework
+-   `FormScreen`: formulari per crear una nova ruta.
+-   `PostalScreen`: mostra la crònica generada en format postal.
+-   `HistoryScreen`: permet consultar les rutes guardades.
 
+### Navegació
 
+S'utilitza Navigation Compose per navegar entre les diferents pantalles i mostrar la informació de la ruta seleccionada.
 
-\## Arquitectura MVVM
+## 💾 Emmagatzematge intern
 
+Les dades de les rutes es guarden en un fitxer JSON anomenat:
 
+`diari_viatges.json`
 
-El projecte està dividit en tres responsabilitats:
+Aquest fitxer s'emmagatzema dins de `context.filesDir`.
 
+L'emmagatzematge intern és privat de l'aplicació i només aquesta pot accedir directament a les seves dades.
 
+Quan l'usuari tanca i torna a obrir l'aplicació, les rutes es poden recuperar llegint el fitxer JSON.
 
-\### Model
+**Què passa si es desinstal·la l'aplicació?**
 
+Les dades guardades a `filesDir` s'eliminen automàticament quan es desinstal·la l'aplicació.
 
+## 📂 Emmagatzematge extern i exportació
 
-RouteEntry representa les dades d'una ruta.
+Per exportar les cròniques s'utilitza Storage Access Framework (SAF), mitjançant:
 
+`ActivityResultContracts.CreateDocument("text/plain")`
 
+Aquesta funcionalitat permet obrir el selector de documents del sistema Android perquè l'usuari pugui escollir on desar la seva crònica en format TXT.
 
-TravelDiaryUiState representa l'estat actual del formulari
+L'usuari pot seleccionar carpetes com Documents o Descàrregues.
 
-i l'històric de viatges.
+**Què passa si es desinstal·la l'aplicació?**
 
+Els documents exportats es guarden fora de l'espai privat de l'aplicació i normalment es conserven després de desinstal·lar-la.
 
+## 🧩 Components apresos
 
-\### ViewModel
+| Component              | Funció                                           |
+| ---------------------- | ------------------------------------------------ |
+| OutlinedTextField      | Introducció de dades mitjançant camps de text.   |
+| FilterChip             | Selecció del nivell de dificultat.               |
+| DatePicker             | Selecció de la data de la ruta.                  |
+| Switch                 | Indica si el viatge s'ha fet en solitari.        |
+| StateFlow              | Gestió reactiva de l'estat de la interfície.     |
+| copy()                 | Actualització immutable de les dades.            |
+| Navigation Compose     | Navegació entre pantalles.                       |
+| JSONObject / JSONArray | Serialització i lectura de dades JSON.           |
+| CreateDocument         | Creació i exportació de documents.               |
+| Intent.ACTION_SEND     | Compartició de cròniques amb altres aplicacions. |
 
-
-
-TravelDiaryViewModel gestiona les dades de la interfície,
-
-les validacions i la comunicació amb el repositori.
-
-
-
-Utilitza MutableStateFlow privat i StateFlow públic.
-
-
-
-Les actualitzacions es realitzen mitjançant copy().
-
-
-
-\### Vista
-
-
-
-Les pantalles estan desenvolupades amb Jetpack Compose:
-
-
-
-\- FormScreen
-
-\- PostalScreen
-
-\- HistoryScreen
-
-
-
-\## Emmagatzematge intern
-
-
-
-Les rutes es guarden en un fitxer JSON anomenat
-
-diari\_viatges.json dins de context.filesDir.
-
-
-
-Aquest emmagatzematge és privat de l'aplicació.
-
-
-
-Quan es desinstal·la l'aplicació, les dades internes
-
-s'eliminen.
-
-
-
-\## Emmagatzematge extern
-
-
-
-S'utilitza Storage Access Framework mitjançant
-
-ActivityResultContracts.CreateDocument.
-
-
-
-L'usuari pot seleccionar on guardar la crònica
-
-en format TXT.
-
-
-
-Els documents exportats normalment es conserven
-
-quan es desinstal·la l'aplicació.
-
-
-
-\## Components apresos
-
-
-
-\- OutlinedTextField: camps de text.
-
-\- FilterChip: selecció de dificultat.
-
-\- DatePicker: selecció de dates.
-
-\- Switch: selecció de viatge en solitari.
-
-\- StateFlow: gestió reactiva de l'estat.
-
-\- Navigation Compose: navegació entre pantalles.
-
-\- JSONObject i JSONArray: gestió de dades JSON.
-
-\- CreateDocument: exportació de fitxers.
-
-\- Intent.ACTION\_SEND: compartir cròniques.
-
-
-
-\## Captures de pantalla
-
-
-
-\### Formulari
-
-
-
-!\[FormScreen\](screenshots/form\_screen.png)
-
-
-
-\### Postal
-
-
-
-!\[PostalScreen\](screenshots/postal\_screen.png)
-
-
-
-\### Històric
-
-
-
-!\[HistoryScreen\](screenshots/history\_screen.png)
-
-
-
-\## Autor
-
-
-
-Projecte acadèmic Android - Diari de Viatges.
+## 📁 Estructura del projecte
+
+text
+
+Android-DiariViatges-Storage/  
+│  
+├── app/  
+│   └── src/main/  
+│       ├── java/com/example/diari\_viatges/  
+│       │   ├── data/  
+│       │   │   ├── RouteEntry.kt  
+│       │   │   └── TravelDiaryRepository.kt  
+│       │   │  
+│       │   ├── viewmodel/  
+│       │   │   └── TravelDiaryViewModel.kt  
+│       │   │  
+│       │   ├── ui/  
+│       │   │   ├── FormScreen.kt  
+│       │   │   ├── PostalScreen.kt  
+│       │   │   └── HistoryScreen.kt  
+│       │   │  
+│       │   ├── navigation/  
+│       │   │   └── AppNavigation.kt  
+│       │   │  
+│       │   └── MainActivity.kt  
+│       │  
+│       └── AndroidManifest.xml  
+│  
+├── gradle/  
+├── build.gradle.kts  
+├── settings.gradle.kts  
+└── README.md
+
+## 📸 Captures de pantalla
+
+Quan l'aplicació estigui executada, afegiré les captures de les diferents pantalles en aquesta secció.
+
+### Formulari de nova ruta
+
+!FormScreen
+
+### Postal de viatge
+
+!PostalScreen
+
+### Historial de rutes
+
+!HistoryScreen
+
+## 🚀 Instal·lació i execució
+
+1.  Descarregar o clonar el repositori.
+2.  Obrir el projecte amb Android Studio.
+3.  Esperar que Gradle sincronitzi les dependències.
+4.  Executar l'aplicació en un emulador o dispositiu Android.
