@@ -141,7 +141,7 @@ Quan l'aplicació estigui executada, afegiré les captures de les diferents pant
 
 ### Postal de viatge
 
-!PostalScreen
+!PostalScreen 
 
 ### Historial de rutes
 
